@@ -21,7 +21,7 @@ function createScene() {
     scene.ambiantColor = new BABYLON.Color3(0, 1, 0);
 
     // a plane
-    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 60, height: 60, segments:50}, scene);
+    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 60, height: 60, segments:10}, scene);
     let mirrorMaterial = new BABYLON.StandardMaterial("mirrorMaterial", scene);
     
     mirrorMaterial.diffuseColor = new BABYLON.Color3(0.4, 1, 0.4);
@@ -44,7 +44,7 @@ function createScene() {
     let spheres = [];
     let sphereMaterials = [];
 
-    for(let i = 0; i < 10; i++) {
+    for(let i = 0; i < 12; i++) {
         spheres[i] = BABYLON.MeshBuilder.CreateSphere("mySphere" +i, {diameter: 2, segments: 32}, scene);
         spheres[i].position.x += 3*i -9;
         spheres[i].position.y = 2;
@@ -56,15 +56,16 @@ function createScene() {
     }
 
     sphereMaterials[0].ambiantColor = new BABYLON.Color3(0, 0.5, 0);
-    sphereMaterials[0].diffuseColor = new BABYLON.Color3(5, 0, 0);
+    sphereMaterials[0].diffuseTexture = new BABYLON.Texture("images/texture1.jpg", scene);
     sphereMaterials[0].specularColor = new BABYLON.Color3(0, 0, 0);
-   
+    sphereMaterials[0].diffuseTexture.uScale *= 1;
+  
     sphereMaterials[1].ambiantColor = new BABYLON.Color3(0, 0.5, 0);
-    sphereMaterials[1].diffuseColor = new BABYLON.Color3(5, 0, 1);
+    sphereMaterials[1].diffuseTexture = new BABYLON.Texture("images/texture2.jpg", scene);
     sphereMaterials[1].specularColor = new BABYLON.Color3(0, 0, 3);
     // concentration of specular reflection, higher = smaller reflection spot
     sphereMaterials[1].specularPower = 256;
-
+ 
     sphereMaterials[2].ambiantColor = new BABYLON.Color3(0, 0.5, 0);
     sphereMaterials[2].diffuseColor = new BABYLON.Color3(0, 0, 0);
     // as if the sphere was illuminated from inside
@@ -99,6 +100,20 @@ function createScene() {
     sphereMaterials[9].diffuseTexture = new BABYLON.VideoTexture("video", ["videos/michel.mp4"],scene);
     sphereMaterials[9].diffuseTexture.vScale *= -1;
 
+    //sphereMaterials[10].ambiantColor = new BABYLON.Color3(0, 0.2, 0);
+    sphereMaterials[10].diffuseTexture = new BABYLON.Texture("images/texture3.jpg", scene);
+    //sphereMaterials[10].specularColor = new BABYLON.Color3.Red;
+    sphereMaterials[10].emissiveColor = new BABYLON.Color3.Yellow;
+
+    sphereMaterials[11].ambiantColor = new BABYLON.Color3(1, 1, 0);
+    sphereMaterials[11].diffuseTexture = new BABYLON.Texture("images/texture4.jpg", scene);
+    sphereMaterials[11].specularColor = new BABYLON.Color3.Red;
+  
+
+    
+
+
+
 
     let camera = new BABYLON.FreeCamera("myCamera", new BABYLON.Vector3(0, 1, -30), scene);
    // This targets the camera to scene origin
@@ -106,29 +121,30 @@ function createScene() {
    camera.attachControl(canvas);
 
     // lights
-    var light = new BABYLON.PointLight("myPointLight", new BABYLON.Vector3(0, 3, 0), scene);
-    light.intensity = .5;
-    light.diffuse = new BABYLON.Color3(1, .5, .5);
+var light = new BABYLON.PointLight("myPointLight", new BABYLON.Vector3(0, 3, 0), scene);
+light.intensity = 0.5;
+light.diffuse = new BABYLON.Color3(1, 0.5, 0.5);
+light.specular = new BABYLON.Color3(1, 1, 1); // change the specular color to white
 
-    var light2 = new BABYLON.PointLight("myPointLight2", new BABYLON.Vector3(0, 3, -10), scene);
-    light2.intensity = .5;
-    light2.diffuse = new BABYLON.Color3.Green;
+var light2 = new BABYLON.PointLight("myPointLight2", new BABYLON.Vector3(10, 5, -5), scene); // move the light to a new position
+light2.intensity = 1.0; // increase the intensity
+light2.diffuse = new BABYLON.Color3(0.5, 1, 0.5); // change the diffuse color to a light green
+light2.specular = new BABYLON.Color3(1, 1, 1); // change the specular color to white
 
     
     let counter = 0;
 
     scene.registerBeforeRender(() => {
         for(let i = 0; i < spheres.length; i++) {
-            spheres[i].position.z = 2*i + Math.sin((i*counter)/2);
-            counter += 0.005;
-
-            //sphereMaterials[i].wireframe = true
-
+            let y = Math.cos(counter + i * 0.2);
+            spheres[i].position.y = 2 * i + y;
+            counter += 0.01;
         }
 
-        sphereMaterials[4].diffuseTexture.uOffset += 0.005;
-        sphereMaterials[5].diffuseTexture.uScale += 0.03;
+        sphereMaterials[4].diffuseTexture.vOffset += 0.005;
+        sphereMaterials[5].diffuseTexture.vScale += 0.03;
     })
+
 
     return scene;
 }
