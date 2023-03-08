@@ -74,8 +74,12 @@ window.addEventListener("resize", () => {
 function modifySettings() {
     // as soon as we click on the game window, the mouse pointer is "locked"
     // you will have to press ESC to unlock it
+
+    //ajoute un événement "onPointerDown" à la scène du jeu lorsque l'utilisateur clique sur la fenêtre du jeu.
     scene.onPointerDown = () => {
-        if(!scene.alreadyLocked) {
+        //On vérifie si le pointeur de la souris est déjà verrouillé ou non. 
+        //Si ce n'est pas le cas, elle demande que le pointeur soit verrouillé en utilisant la méthode "requestPointerLock()" de l'élément canvas
+        if(!scene.alreadyLocked) { 
             console.log("requesting pointer lock");
             canvas.requestPointerLock();
         } else {

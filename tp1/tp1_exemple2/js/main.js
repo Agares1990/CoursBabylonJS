@@ -107,7 +107,8 @@ function createScene() {
 
     sphereMaterials[11].ambiantColor = new BABYLON.Color3(1, 1, 0);
     sphereMaterials[11].diffuseTexture = new BABYLON.Texture("images/texture4.jpg", scene);
-    sphereMaterials[11].specularColor = new BABYLON.Color3.Red;
+    //sphereMaterials[11].specularColor = new BABYLON.Color3.Red;
+    sphereMaterials[11].diffuseTexture.vScale *= 4;
   
 
     
@@ -115,7 +116,7 @@ function createScene() {
 
 
 
-    let camera = new BABYLON.FreeCamera("myCamera", new BABYLON.Vector3(0, 1, -30), scene);
+    let camera = new BABYLON.FreeCamera("myCamera", new BABYLON.Vector3(10, 10, -50), scene);
    // This targets the camera to scene origin
    //camera.setTarget(BABYLON.Vector3.Zero());
    camera.attachControl(canvas);
