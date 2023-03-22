@@ -177,10 +177,15 @@ function createGround( scene )
 }
 
 function createSkybox(scene) {
-    let skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 5000.0 }, scene);
+    if (typeof BABYLON === 'undefined') {
+        console.error('BABYLON library not found');
+        return;
+    }
+
+    let skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 2000.0 }, scene);
     let skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/skybox/", scene, [
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("models/textures/skybox/", scene, [
         "skybox_px.jpg",
         "skybox_py.jpg",
         "skybox_pz.jpg",
@@ -192,8 +197,9 @@ function createSkybox(scene) {
     skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     skybox.material = skyboxMaterial;
-    skybox.infiniteDistance = true;
+    // skybox.infiniteDistance = true;
 }
+
 
 
 function createLights( scene )
