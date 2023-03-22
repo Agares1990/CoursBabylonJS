@@ -46,6 +46,8 @@ async function createScene()
 	let ground = createGround( scene );
 	let freeCamera = createFreeCamera( scene );
 
+	createSkybox(scene);
+
 	let tank = await createTank( scene ); // Source : https://clara.io/view/73ee908d-1727-4246-8f89-3b2bcbf831d4
 
 	// second parameter is the target to follow
@@ -154,7 +156,7 @@ function createRabbits( scene )
 
 function createGround( scene )
 {
-	const groundOptions = { width: 2000, height: 2000, subdivisions: 20, minHeight: 0, maxHeight: 100, onReady: onGroundCreated };
+	const groundOptions = { width: 2000, height: 2000, subdivisions: 20, minHeight: 0, maxHeight: 0, onReady: onGroundCreated };
 	//scene is optional and defaults to the current scene
 	const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap( "gdhm", 'images/hmap1.png', groundOptions, scene );
 
@@ -173,6 +175,26 @@ function createGround( scene )
 	}
 	return ground;
 }
+
+function createSkybox(scene) {
+    let skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 5000.0 }, scene);
+    let skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+    skyboxMaterial.backFaceCulling = false;
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/skybox/", scene, [
+        "skybox_px.jpg",
+        "skybox_py.jpg",
+        "skybox_pz.jpg",
+        "skybox_nx.jpg",
+        "skybox_ny.jpg",
+        "skybox_nz.jpg"
+    ]);
+    skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    skybox.material = skyboxMaterial;
+    skybox.infiniteDistance = true;
+}
+
 
 function createLights( scene )
 {
