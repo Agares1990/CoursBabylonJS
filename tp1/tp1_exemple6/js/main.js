@@ -60,6 +60,7 @@ function createGround(scene) {
 function createLights(scene) {
     // i.e sun light with all light rays parallels, the vector is the direction.
     let light0 = new BABYLON.DirectionalLight("dir0", new BABYLON.Vector3(-1, -1, 0), scene);
+    light0.intensity = 2; // pour rendre la scène plus lumineuse
 
 }
 
@@ -101,13 +102,13 @@ let zMovement = 5;
 function createTank(scene) {
     let tank = new BABYLON.MeshBuilder.CreateBox("heroTank", {height:1, depth:6, width:6}, scene);
     let tankMaterial = new BABYLON.StandardMaterial("tankMaterial", scene);
-    tankMaterial.diffuseColor = new BABYLON.Color3.Red;
-    tankMaterial.emissiveColor = new BABYLON.Color3.Blue;
+    tankMaterial.diffuseColor = new BABYLON.Color3.Blue;
+    tankMaterial.emissiveColor = new BABYLON.Color3.Yellow;
     tank.material = tankMaterial;
 
     // By default the box/tank is in 0, 0, 0, let's change that...
     tank.position.y = 0.6;
-    tank.speed = 1;
+    tank.speed = 3;
     tank.frontVector = new BABYLON.Vector3(0, 0, 1);
 
     tank.move = () => {
@@ -129,7 +130,7 @@ function createTank(scene) {
         if(inputStates.up) {
             //tank.moveWithCollisions(new BABYLON.Vector3(0, 0, 1*tank.speed));
             tank.moveWithCollisions(tank.frontVector.multiplyByFloats(tank.speed, tank.speed, tank.speed));
-        }    
+        }  
         if(inputStates.down) {
             //tank.moveWithCollisions(new BABYLON.Vector3(0, 0, -1*tank.speed));
             tank.moveWithCollisions(tank.frontVector.multiplyByFloats(-tank.speed, -tank.speed, -tank.speed));
@@ -137,14 +138,15 @@ function createTank(scene) {
         }  
         if(inputStates.left) {
             //tank.moveWithCollisions(new BABYLON.Vector3(-1*tank.speed, 0, 0));
-            tank.rotation.y -= 0.02;
+            tank.rotation.y -= 0.06;
             tank.frontVector = new BABYLON.Vector3(Math.sin(tank.rotation.y), 0, Math.cos(tank.rotation.y));
         }    
         if(inputStates.right) {
             //tank.moveWithCollisions(new BABYLON.Vector3(1*tank.speed, 0, 0));
-            tank.rotation.y += 0.02;
+            tank.rotation.y += 0.06;
             tank.frontVector = new BABYLON.Vector3(Math.sin(tank.rotation.y), 0, Math.cos(tank.rotation.y));
         }
+        
     }
 
     return tank;
@@ -213,4 +215,38 @@ function modifySettings() {
         }
     }, false);
 }
+
+
+let spaceship;
+
+function createSpaceship(scene) {
+  spaceship = BABYLON.MeshBuilder.CreateBox("spaceship", { height: 1, depth: 3, width: 2 }, scene);
+  let spaceshipMaterial = new BABYLON.StandardMaterial("spaceshipMaterial", scene);
+  spaceshipMaterial.diffuseColor = new BABYLON.Color3.Yellow;
+  spaceshipMaterial.emissiveColor = new BABYLON.Color3.Red;
+  spaceship.material = spaceshipMaterial;
+
+  spaceship.position.y = 1;
+  spaceship.speed = 0.2;
+  spaceship.frontVector = new BABYLON.Vector3(0, 0, 1);
+
+  spaceship.move = () => {
+    spaceship.moveWithCollisions(spaceship.frontVector.multiplyByFloats(spaceship.speed, spaceship.speed, spaceship.speed));
+  };
+
+  return spaceship;
+}
+
+// function createScene() {
+//   let scene = new BABYLON.Scene(engine);
+//   let ground = createGround(scene);
+//   let freeCamera = createFreeCamera(scene);
+//   let spaceship = createSpaceship(scene);
+
+//   scene.registerBeforeRender(() => {
+//     spaceship.move();
+//   });
+
+//   return scene;
+// }
 
